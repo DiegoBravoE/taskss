@@ -4,12 +4,12 @@ const { catchAsync } = require("../utils/catchAsync.utils");
 const { appError } = require('../utils/appError.utils');
 
 const createTask = catchAsync(async (req, res, next) => {
-  const { title, userId, limitDate } = req.body;
+  const { title, userId, limitDate,startDate } = req.body;
   const newTask = await Tasks.create({
     title,
     userId,
     limitDate,
-    startDate:new Date(),
+    startDate,
     finishDate:new Date(),
   });
   res.status(201).json({
@@ -34,10 +34,18 @@ const getAllTaskStatus= async(req, res, next)=>{
     })
 
 }
-const upDateTaskById =async()=>{
+const upDateTaskById = catchAsync(async (req, res, next) => {
+  const { task } = req;
+  const {title } = req.body;
+  await task.update({ title });
+  res.status(204).json({ status: "success" });
+}); 
+const deleteTask= catchAsync(async (req, res, next) => {
+	const { task } = req;
 
-}
-const deleteTask= async()=>{
+	// await user.destroy();
+	await task.update({ status: 'cancelled' });
 
-}
+	res.status(204).json({ status: 'success' });
+});
 module.exports={createTask,getAllTask,getAllTaskStatus,upDateTaskById,deleteTask}

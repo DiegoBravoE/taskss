@@ -5,7 +5,7 @@ const { catchAsync } = require("../utils/catchAsync.utils");
 const taskExistStatus = catchAsync(async (req, res, next) => {
   const { status } = req.params;
 
-  const task = await Tasks.findOne({ where: { status} });
+  const task = await Tasks.findAll({ where: { status} });
   if (!task) {
     return next(new appError("status active", 404));
   }
