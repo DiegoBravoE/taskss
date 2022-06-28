@@ -36,9 +36,16 @@ const getAllTaskStatus= async(req, res, next)=>{
 }
 const upDateTaskById = catchAsync(async (req, res, next) => {
   const { task } = req;
-  const {title } = req.body;
-  await task.update({ title });
+  const {limitDate,startDate,finishDate } = req.body;
+  await task.update({ limitDate,startDate,finishDate });
+if (finishDate>limitDate) {
+  await task.update({ status: 'late' });
+}
+if (finishDate<=limitDate) {
+  await task.update({ status: 'completed' });
+}else{
   res.status(204).json({ status: "success" });
+}
 }); 
 const deleteTask= catchAsync(async (req, res, next) => {
 	const { task } = req;
