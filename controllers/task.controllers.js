@@ -40,10 +40,8 @@ const upDateTaskById = catchAsync(async (req, res, next) => {
   await task.update({ limitDate,startDate,finishDate });
 if (finishDate>limitDate) {
   await task.update({ status: 'late' });
-}
-if (finishDate<=limitDate) {
-  await task.update({ status: 'completed' });
 }else{
+  await task.update({ status: 'completed' });
   res.status(204).json({ status: "success" });
 }
 }); 
